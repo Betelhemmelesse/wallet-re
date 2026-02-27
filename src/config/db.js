@@ -1,16 +1,21 @@
 import { neon } from "@neondatabase/serverless";
 import "dotenv/config";
 
-// Validate DATABASE_URL
+// Validate DATABASE_URL but don't exit if missing
 if (!process.env.DATABASE_URL) {
-  console.error("ERROR: DATABASE_URL environment variable is not set!");
-  console.error("Please set DATABASE_URL in your Render environment variables");
-  process.exit(1);
+  console.error("WARNING: DATABASE_URL environment variable is not set!");
+  console.error("Database features will not work until DATABASE_URL is configured");
+  // Don't exit - allow server to start for testing
 }
 
-export const sql = neon(process.env.DATABASE_URL);
+export const sql = process.env.DATABASE_URL ? neon(process.env.DATABASE_URL) : null;
 
 export async function initDB() {
+  if (!process.env.DATABASE_URL) {
+    console.log("Skipping database initialization - DATABASE_URL not set");
+    return;
+  }
+  
   try {
     console.log("Initializing database...");
     await sql`CREATE TABLE IF NOT EXISTS transactions(
@@ -30,6 +35,6 @@ export async function initDB() {
   } catch (error) {
     console.error("Error initializing DB:", error);
     console.error("Database connection failed. Please check your DATABASE_URL");
-    process.exit(1);
+    // Don't exit - allow server to continue
   }
 }

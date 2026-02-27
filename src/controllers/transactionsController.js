@@ -2,6 +2,13 @@ import { sql } from "../config/db.js";
 
 export async function getTransactionsByUserId(req, res) {
   try {
+    if (!sql) {
+      return res.status(503).json({ 
+        message: "Database not available. Please configure DATABASE_URL.",
+        error: "Database connection not established"
+      });
+    }
+    
     const { userId } = req.params;
     const transactions = await sql`
         SELECT * FROM transactions WHERE user_id = ${userId} ORDER BY create_at DESC`;
@@ -60,6 +67,13 @@ export async function deleteTransaction(req, res) {
 
 export async function getSummaryByUserId(req, res) {
   try {
+    if (!sql) {
+      return res.status(503).json({ 
+        message: "Database not available. Please configure DATABASE_URL.",
+        error: "Database connection not established"
+      });
+    }
+    
     const { userId } = req.params;
 
     const balanceResult = await sql`
