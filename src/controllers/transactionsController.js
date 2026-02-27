@@ -8,8 +8,13 @@ export async function getTransactionsByUserId(req, res) {
 
     res.status(200).json(transactions);
   } catch (error) {
-    console.log("Error getting the transaction", error);
-    res.status(500).json({ message: "internal server error" });
+    console.error("Error getting transactions:", error);
+    console.error("Error details:", error.message);
+    console.error("Stack trace:", error.stack);
+    res.status(500).json({ 
+      message: "internal server error",
+      error: error.message 
+    });
   }
 }
 
@@ -77,7 +82,12 @@ export async function getSummaryByUserId(req, res) {
       expenses: expensesResult[0].expenses,
     });
   } catch (error) {
-    console.log("Error getting summary the transaction", error);
-    res.status(500).json({ message: "internal server error" });
+    console.error("Error getting summary:", error);
+    console.error("Error details:", error.message);
+    console.error("Stack trace:", error.stack);
+    res.status(500).json({ 
+      message: "internal server error",
+      error: error.message 
+    });
   }
 }
