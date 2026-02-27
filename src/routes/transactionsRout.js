@@ -7,12 +7,13 @@ import {
 } from "../controllers/transactionsController.js";
 
 const router = express.Router();
-router.get("/:userId", getTransactionsByUserId);
 
-router.post("/", createTransaction);
-
-router.delete("/:id", deleteTransaction);
-
+// Specific routes first
 router.get("/summary/:userId", getSummaryByUserId);
+
+// General routes after
+router.get("/:userId", getTransactionsByUserId);
+router.post("/", createTransaction);
+router.delete("/:id", deleteTransaction);
 
 export default router;

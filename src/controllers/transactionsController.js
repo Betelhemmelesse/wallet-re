@@ -14,7 +14,6 @@ export async function getTransactionsByUserId(req, res) {
 }
 
 export async function createTransaction(req, res) {
-  req, res;
   try {
     const { title, amount, catagory, user_id } = req.body;
     if (!title || !user_id || !catagory || amount === undefined) {
